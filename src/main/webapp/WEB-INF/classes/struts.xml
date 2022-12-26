@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts  
+Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">  
+
+
+
+<struts>  
+
+
+<package name="user" extends="json-default" namespace='/login'> 
+<action name="loginAction" class="com.ecommerce.loginAction.loginAction" >  
+        <interceptor-ref name="json" />
+ <result name = "ok" type="json" />
+</action>  
+</package>
+
+
+<package name="default" extends="json-default" namespace='/user'>  
+<action name="orderHistoryAction" class="com.ecommerce.loginAction.orderHistoryAction">  
+        <interceptor-ref name="json" />
+ <result name = "ok" type="json" />
+</action>  
+
+<action name="wishListAction" class="com.ecommerce.loginAction.wishListAction">  
+        <interceptor-ref name="json" />
+ <result name = "ok" type="json" />
+</action>  
+
+<action name="addToWishListAction" class="com.ecommerce.loginAction.addToWishListAction">  
+        <interceptor-ref name="json" />
+ <result name = "ok" type="json" />
+</action> 
+
+<action name="buyAction" class="com.ecommerce.loginAction.buyAction">  
+        <interceptor-ref name="json" />
+ <result name = "ok" type="json" />
+</action>   
+
+</package>  
+</struts>  
+
+<!-- <struts>
+    <constant name="struts.convention.action.suffix" value="Controller"/>
+    <constant name="struts.convention.action.mapAllMatches" value="true"/>
+    <constant name="struts.convention.default.parent.package" value="rest-default"/>
+    <constant name="struts.convention.package.locators" value="rest"/>
+</struts>  -->
+
