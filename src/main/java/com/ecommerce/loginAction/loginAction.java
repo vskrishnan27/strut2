@@ -1,7 +1,7 @@
 package com.ecommerce.loginAction;
 
 
-import java.net.http.HttpRequest;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +31,6 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 		this.user = user;
 	}
 	
-	
-
-
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -42,9 +38,7 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getUUID() {
-		return UUID;
-	}
+
 	public void setUUID(String uUID) {
 		UUID = uUID;
 	}
@@ -60,22 +54,22 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 			 session = ActionContext.getContext().getSession();
 				try {
 					dbConnection db = new dbConnection();
+					
+					
+//					String s = ServletActionContext.getRequest().
+					
+					System.out.println(username+"^^^^^"+password+"++++");
 					User user = db.checkLogin(username,password);
 					setUser(user);
 					if(user==null )
 						System.out.println("no users found ==>username / pswrd may be wrong");
-//						return "fail";
-						
-					
-					 request = ServletActionContext.getRequest();
-					request.setAttribute("UUID", user.getUUID());
-					request.setAttribute("role", user.getRole());
-					
+
 					session.put("userInfo",user);
 					session.put("UUID", user.getUUID());
-					session.put("just", "summa in logub");
+					session.put("role", user.getRole());
 					
-					
+					System.out.println("user returned");
+					return "user";
 	
 					
 				} catch (Exception e) {
@@ -91,6 +85,7 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 
 		return "ok";
 	}
+	
 	@Override
 	public User getModel() {
 		// TODO Auto-generated method stub

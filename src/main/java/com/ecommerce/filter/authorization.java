@@ -1,8 +1,6 @@
 package com.ecommerce.filter;
 
 import java.io.IOException;
-import java.util.Map;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,10 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionContext;
-
 public class authorization implements Filter {
 
 	@Override
@@ -24,7 +18,7 @@ public class authorization implements Filter {
 		System.out.println("filter destroy");
 	}
 
-	@SuppressWarnings("deprecation")
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -35,22 +29,43 @@ public class authorization implements Filter {
         HttpSession session = req.getSession(true);
 		
 		try {
-			
-			if(session.getAttribute("UUID")!=null) {
-				req.getRequestDispatcher("welcome.jsp").forward(request, response);
+//			
+			System.out.println(req.getServletPath());
+			if(req.getServletPath().equals("/login/loginAction.action")) { 
+				System.out.println(req.getServletPath());
+				chain.doFilter(request, response);
 				return;
 			}
+			
+			if(session.getAttribute("UUID")==null) {
+				System.out.println("loginPage");
+				req.getRequestDispatcher("LoginPage.jsp").forward(request, response);
+				return;
+			}
+			
+			System.out.println("second filter");
+			if(session.getAttribute("UUID")!=null && session.getAttribute("role").equals("user") && req.getServletPath().equals("/index.jsp")) {
+				System.out.println("user panel");
+				req.getRequestDispatcher("adminPage.jsp").forward(request, response);
+				return;
+			}
+			
+			if(session.getAttribute("UUID")!=null && session.getAttribute("role").equals("admin") && req.getServletPath().equals("/index.jsp")) {
+				System.out.println("admin panel");
+				req.getRequestDispatcher("userPage.jsp").forward(request, response);
+				return;
+			}
+		
 			System.out.println(session.getAttribute("UUID"));
 			chain.doFilter(request, response);
 			
 			
 			
-//			chain.doFilter(request, response);
-//			System.out.println(session);
 		} catch (Exception e) {
 			
-			System.out.println( "<====>"+e.getMessage());
-			chain.doFilter(request, response);
+			System.out.println(e);
+			System.out.println("afyer");
+	
 			
 		}
 		

@@ -205,6 +205,39 @@ public class dbConnection {
 		
 		
 	}
+	
+	
+	public List<Products> showProducts(){
+		
+		final String showProductsQuery = "select * from products;";
+		if(conn==null) connectToDB();
+		List<Products> productList = new ArrayList<>();
+		  try {
+				
+			  PreparedStatement ps=conn.prepareStatement(showProductsQuery);  
+
+			  ResultSet rs=ps.executeQuery(); 
+			  
+			  while(rs.next()){  
+				  System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
+				  Products product = new Products(rs.getString(1),rs.getString(3),rs.getInt(2),rs.getInt(4));
+				  productList.add(product);  
+			  }  
+			 
+			 return productList;
+			  
+			  
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("sql exception while fetchingbut action of a user==>"+e.getMessage());
+			return null;
+		}  catch(Exception e) {
+			System.out.println("exception in buy action");
+			return null;
+		}
+		
+		
+	}
 
 	
 	
