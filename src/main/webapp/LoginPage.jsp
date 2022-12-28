@@ -23,8 +23,8 @@
             var email = $("#email-input").val();
             var password = $("#paswrd-input").val();
             var js = JSON.stringify( {
-                "username":"vsk1@gmail.com",
-                "password":"vsk"
+                "username":"kvs1@gmail.com",
+                "password":"zx-cv"
             })
             console.log(js)
             $.ajax({
@@ -35,7 +35,7 @@
             contentType: "application/json; charset=utf-8",
             success: function(response){
             	console.log(response.model)
-                if(response.model.role=='admin'){
+                if(response.model.role=='buyer'){
                     console.log("user",response.model.username)
                     window.location.href = 'userPage.jsp'
                     return;

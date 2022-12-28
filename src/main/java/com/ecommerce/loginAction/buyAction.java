@@ -8,7 +8,7 @@ import com.ecommerce.model.User;
 import com.ecommerce.repository.dbConnection;
 import com.opensymphony.xwork2.ActionContext;
 
-public class buyAction {
+public class buyAction extends Thread{
 
 	public String execute() {
 		try {
@@ -17,6 +17,9 @@ public class buyAction {
 			dbConnection db = new dbConnection();
 			Map<String,Object> session = ActionContext.getContext().getSession();
 			User u = (User) session.get("userInfo");
+			
+	
+			
 			db.buyProduct(productId,qty,u.getUUID());			
 		} catch (Exception e) {
 			// TODO: handle exception

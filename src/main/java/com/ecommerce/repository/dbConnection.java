@@ -11,7 +11,7 @@ import com.ecommerce.model.Orders;
 import com.ecommerce.model.Products;
 import com.ecommerce.model.User;
 
-public class dbConnection {
+public class dbConnection  {
 	
 	private  Connection conn;
 	
@@ -169,27 +169,42 @@ public class dbConnection {
 	
 	final String addToOrderHistoryQuery =  "INSERT INTO orders (p_id,qty,uuid) VALUES(?,?,?);";
 	final String decreaseStock = "UPDATE products p SET p.stock = p.stock - ? WHERE p.product_id=?;";
+	final String getQuantityStock = "select stock from products where product_id=?;";
 
 	public String buyProduct(String productId, String qty, String uuid) {
 		// TODO Auto-generated method stub
 		if(conn==null) connectToDB();
 		  try {
+			  
+		
 				
-			  PreparedStatement ps=conn.prepareStatement(addToOrderHistoryQuery);  
-			  ps.setString(1,productId);
-			  ps.setString(2,qty);
-			  ps.setString(3,uuid);
-			  System.out.println(ps);
-			  ps.executeUpdate(); 
-			  System.out.println(ps);
-			  PreparedStatement ps1=conn.prepareStatement(decreaseStock);
-			  ps1.setString(1, qty);
-			  ps1.setString(2,productId);
-			 ps1.executeUpdate(); 
-			 
-			 
-			 
-			 return "SUCCESS";
+				  PreparedStatement getQuantityStatement=conn.prepareStatement(getQuantityStock); 
+				  getQuantityStatement.setString(1, productId);
+				  ResultSet qtyRS =getQuantityStatement.executeQuery();
+				  
+				  System.out.print("availableStock="+qtyRS.getString("stock"));
+				  
+				  		
+				  PreparedStatement ps=conn.prepareStatement(addToOrderHistoryQuery);  
+				  ps.setString(1,productId);
+				  ps.setString(2,qty);
+				  ps.setString(3,uuid);
+				  System.out.println(ps);
+				  ps.executeUpdate(); 
+				  System.out.println(ps);
+				  PreparedStatement ps1=conn.prepareStatement(decreaseStock);
+				  ps1.setString(1, qty);
+				  ps1.setString(2,productId);
+				 ps1.executeUpdate(); 
+				 
+				 
+				 
+				 return "SUCCESS";
+			  
+			  
+			  
+			  
+			
 			  
 			  
 		} catch (SQLException e) {
@@ -238,6 +253,7 @@ public class dbConnection {
 		
 		
 	}
+
 
 	
 	

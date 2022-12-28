@@ -9,7 +9,7 @@
     
 </head>
 <body>
-        <h1>user Page</h1>
+        <h1>ADMIN Page</h1>
         <select>
             <option value="actual value 1">Display Text 1</option>
             <option value="actual value 2">Display Text 2</option>
