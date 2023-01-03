@@ -3,12 +3,9 @@
     /* border-radius: 30px; */
     
 }
-
 .navbar ul{
     overflow: auto;
 }
-
-
 .navbar li{
     float:left;
     list-style: none; 

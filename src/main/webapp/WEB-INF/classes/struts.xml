@@ -10,18 +10,21 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
   <result name="admin" type="json"/> 
  <result name = "ok" type="json" />
 </action>  
-
-
 </package>
+
+<package name="out" namespace="/logout" extends="json-default" > 
+<action name="logout" class="com.ecommerce.loginAction.loginAction" method="logout">
+			<result name="LOGOUT" type="json">/LoginPage.jsp</result>
+		</action>
+</package>
+
 
  <package name="usr" extends="json-default" namespace="/user">  
 
 <action name="orderHistoryAction" class="com.ecommerce.loginAction.orderHistoryAction">  
         <interceptor-ref name="json" />
-        
  <result name = "ok" type="json" /> 
 </action>  
-
 <action name="wishListAction" class="com.ecommerce.loginAction.wishListAction">  
         <interceptor-ref name="json" />
  <result name = "ok" type="json" />
@@ -34,7 +37,7 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 
 <action name="buyAction" class="com.ecommerce.loginAction.buyAction">  
         <interceptor-ref name="json" />
- <result name = "ok" type="json" />
+ <result name = "SUCCESS" type="json" />
 </action>  
 <action name="showProducts" class="com.ecommerce.loginAction.showProductAction">  
         <interceptor-ref name="json" />

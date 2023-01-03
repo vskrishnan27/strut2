@@ -17,13 +17,9 @@ public class buyAction extends Thread{
 			dbConnection db = new dbConnection();
 			Map<String,Object> session = ActionContext.getContext().getSession();
 			User u = (User) session.get("userInfo");
-			
-	
-			
-			db.buyProduct(productId,qty,u.getUUID());			
+			return db.buyProduct(productId,qty,u.getUUID());	
 		} catch (Exception e) {
-			// TODO: handle exception
+			return "failed";
 		}
-		return "ok";
 	}
 }

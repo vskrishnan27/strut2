@@ -1,0 +1,25 @@
+#ad-product{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    flex-direction: column;
+}
+
+#ad-product>label{
+    font-size: larger;
+}
+
+#ad-product>input{
+    padding: 1rem;
+    width: 30%;
+}
+
+#ad-product>button{
+    padding: 1rem;
+    width: 30%;
+}
+
+#ad-product>input{
+    margin: 2rem;
+}

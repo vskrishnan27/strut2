@@ -4,13 +4,14 @@
 
 
 
-<%@ taglib uri="/struts-tags" prefix="s" %>
+<%-- <%@ taglib uri="/struts-tags" prefix="s" %>
 <s:form action="loginAction">
 <s:textfield name="username" label="Product Id"></s:textfield>
 <s:textfield name="password" label="Product Name"></s:textfield>
 <s:submit value="save"></s:submit>
 
-</s:form> -
+</s:form> - --%>
+<h1>home</h1>
 
 <%-- <hr/>  
 <h3>Login Form</h3>  

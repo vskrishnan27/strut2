@@ -1,11 +1,56 @@
 
   $(document).ready(function() {
+    calls("viw_products")
     
-    $("select.usr").change(function(){
-      var options = $(this).children("option:selected").val();
+    
+    console.log("user page ready")
+    $("#home").click(function(){
+      console.log("home clicked")
+      calls("viw_products")
+     
+    })
 
-        let endpoint = ""
-        let way=""
+    $("#wishList").click(function(){
+      console.log("wishlist clicked")
+      calls("wish_list")
+    })
+
+    $("#orderHistory").click(function(){
+      console.log("orde history clicked")
+      calls("history")
+    })
+
+
+
+    $("#userLogout").click(function(){
+      console.log("logout new")
+      let endpt="http://localhost:8080/ecommerce/logout/logout.action"
+      console.log(endpt)
+     
+     	var cookies = $.cookie();
+			for(var cookie in cookies) {
+			console.log(cookie)
+			   $.removeCookie(cookie);
+			}
+     
+		
+      $.ajax({
+        url:endpt ,
+        type: 'GET',
+        dataType: 'json', // added data type
+        success: function(res) {
+            alert("Logged out - successfully:)");
+            window.location.reload()
+        },
+        error:function(err){
+         console.log(err)
+        }
+    });
+    })
+
+    
+   function calls(options){
+        var endpoint=""
         if(options=='history'){
             endpoint="http://localhost:8080/ecommerce/user/orderHistoryAction.action"
             way="orderHistory"
@@ -46,11 +91,9 @@
       }
   });
 
+}
 
-
-          });
       
-      })
    
       // create a table 
 
@@ -105,8 +148,9 @@
                                           },
                                         
                                           success: function(res) {
-                                              alert("added to wishlist")
-                                              alert(res);
+                                     
+                                              console.log(res)
+                                              alert(res.status);
                                           },
                                           error:function(err){
                                             console.log("wishlist_er")
@@ -202,3 +246,4 @@
           });
 
 
+        })

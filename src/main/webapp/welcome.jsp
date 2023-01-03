@@ -1,6 +1,6 @@
 
 
-<%--  --%><%@ taglib uri="/struts-tags" prefix="s" %>
+<%--  --%><%-- <%@ taglib uri="/struts-tags" prefix="s" %> --%><!--  -->
 
 <h1>welcome page</h1>
 

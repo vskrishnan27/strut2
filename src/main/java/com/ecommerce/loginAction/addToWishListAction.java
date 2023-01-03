@@ -20,12 +20,13 @@ public class addToWishListAction {
 			Map<String,Object> session = ActionContext.getContext().getSession();
 			User u = (User) session.get("userInfo");
 			status=db.addToWishList(productId,u.getUUID());
+			return "ok";
 	
 		}catch(Exception e) {
 			System.out.println(e.getMessage()+"<===add to wishlist");
-			status="failed to add";
-			return e.getMessage();
+			status=e.getMessage();
+			return "ok";
 		}
-		return "ok";
+		
 	}
 }

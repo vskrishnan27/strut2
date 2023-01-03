@@ -35,32 +35,20 @@ public class dbConnection  {
 		return conn;
 	}
 	
-	
-	
-	
 	// findWishListByUUID to get the wishlist of the users
 	final String wishListQuery = "SELECT w.p_id AS product_id,product_name,price,stock FROM wish_list w  INNER JOIN products p ON w.p_id = p.product_id WHERE w.uuid = ?;";
 	
 	public List<Products> findWishListByUUID(String UUID){
 		if(conn==null) connectToDB();
 		List<Products> wishList = new ArrayList<>();
-		  
 				   try {
-					
 					  PreparedStatement ps=conn.prepareStatement(wishListQuery);  
 					  ps.setString(1,UUID);
 					  ResultSet rs=ps.executeQuery(); 
-					  
 					  while(rs.next()){  
-						  System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
 						  Products product = new Products(rs.getString(1),rs.getString(2),Integer.parseInt(rs.getString(3)),Integer.parseInt(rs.getString(4)));
-						  
 						  wishList.add(product);  
-					  }  
-					  
-					  
-					  
-					  
+					  }  	  
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					System.out.println("sql exception while fetching wishlist history of a user==>"+e.getMessage());
@@ -91,10 +79,7 @@ public class dbConnection  {
 						  String UUID = rs.getString("UUID");
 						 String role = rs.getString("role");
 						 String phone = rs.getString("phone");
-						 System.out.println(phone);
-						 
-						  return new User(name,null,UUID,role,phone);
-					  
+						 return new User(name,null,UUID,role,phone);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					System.out.println("sql exception while fetching order login of a user");
@@ -102,58 +87,49 @@ public class dbConnection  {
 				}  catch(Exception e) {
 					System.out.println("exception in login");
 				}
-		 
-		
 		return null;
 	}
 	
-	
-	
 	final String orderHistoryQuery = "select p.product_name,p.price,o.qty from orders o inner join products p on o.p_id=p.product_id where uuid=?;";
-	
 	public List<Orders> findOrderHistoryByUUID(String UUID){
 		if(conn==null) connectToDB();
 		List<Orders> orderHistory = new ArrayList<>();
-		  
 				   try {
-					
 					  PreparedStatement ps=conn.prepareStatement(orderHistoryQuery);  
 					  ps.setString(1,UUID);
 					  ResultSet rs=ps.executeQuery(); 
-					  
 					  while(rs.next()){  
 						  System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
 						  Orders order = new Orders(rs.getString(1),rs.getInt(2),rs.getInt(3));
 						  orderHistory.add(order);  
-					  }  
-					  
-					  
+					  }    
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					System.out.println("sql exception while fetching order history of a user==>"+e.getMessage());
 				}  catch(Exception e) {
 					System.out.println("exception in orderhistory");
 				}
-		 
-		
 		return orderHistory;
 	}
 	
 	
 	// add wishlist for the user
 	final String addWishListQuery ="insert into wish_list values(?,?);";
+	final String checkAlreadtInWishListQuery = " select * from wish_list where p_id = ? AND uuid=?;";
 	public String addToWishList(String productId,String UUID) {
 		if(conn==null) connectToDB();
 		  try {
-				
+			  PreparedStatement wishListCheck = conn.prepareStatement(checkAlreadtInWishListQuery);
+			  wishListCheck.setString(1,productId);
+			  wishListCheck.setString(2, UUID);
+			  ResultSet rs = wishListCheck.executeQuery();
+			  if(rs.next()) {
+				  return "already in wishList";
+			  }
 			  PreparedStatement ps=conn.prepareStatement(addWishListQuery);  
 			  ps.setString(1,productId);
 			  ps.setString(2,UUID);
-			  
-			  System.out.println(ps);
-			 ps.executeUpdate(); 
-			  
-			  
+			  ps.executeUpdate(); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("sql exception while fetching order history of a user==>"+e.getMessage());
@@ -162,7 +138,6 @@ public class dbConnection  {
 			System.out.println("exception in orderhistory");
 			return "failed to add to wish List";
 		}
-
 		return "wish list added successfully";
 	}
 	
@@ -171,20 +146,19 @@ public class dbConnection  {
 	final String decreaseStock = "UPDATE products p SET p.stock = p.stock - ? WHERE p.product_id=?;";
 	final String getQuantityStock = "select stock from products where product_id=?;";
 
-	public String buyProduct(String productId, String qty, String uuid) {
-		// TODO Auto-generated method stub
+	public synchronized String buyProduct(String productId, String qty, String uuid) {
 		if(conn==null) connectToDB();
 		  try {
-			  
-		
-				
+			  	System.out.println(productId+" "+qty+" "+uuid);
 				  PreparedStatement getQuantityStatement=conn.prepareStatement(getQuantityStock); 
 				  getQuantityStatement.setString(1, productId);
 				  ResultSet qtyRS =getQuantityStatement.executeQuery();
-				  
-				  System.out.print("availableStock="+qtyRS.getString("stock"));
-				  
-				  		
+				  if(qtyRS.next()) {
+//					checking the available stock if the user requirement is high it will return error
+					  int availableStock = Integer.parseInt(qtyRS.getString("stock"));
+					  int requiredQty = Integer.parseInt(qty);
+					  if(availableStock<requiredQty) return "stock limit is "+availableStock;
+				  }
 				  PreparedStatement ps=conn.prepareStatement(addToOrderHistoryQuery);  
 				  ps.setString(1,productId);
 				  ps.setString(2,qty);
@@ -196,17 +170,7 @@ public class dbConnection  {
 				  ps1.setString(1, qty);
 				  ps1.setString(2,productId);
 				 ps1.executeUpdate(); 
-				 
-				 
-				 
-				 return "SUCCESS";
-			  
-			  
-			  
-			  
-			
-			  
-			  
+				 return "SUCCESS";  
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("sql exception while fetchingbut action of a user==>"+e.getMessage());
@@ -215,51 +179,28 @@ public class dbConnection  {
 			System.out.println("exception in buy action");
 			return "failed to add to buy action";
 		}
-		  
-		 
-		
-		
 	}
 	
 	
 	public List<Products> showProducts(){
-		
 		final String showProductsQuery = "select * from products;";
 		if(conn==null) connectToDB();
 		List<Products> productList = new ArrayList<>();
 		  try {
-				
 			  PreparedStatement ps=conn.prepareStatement(showProductsQuery);  
-
 			  ResultSet rs=ps.executeQuery(); 
-			  
 			  while(rs.next()){  
 				  System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
 				  Products product = new Products(rs.getString(1),rs.getString(3),rs.getInt(2),rs.getInt(4));
 				  productList.add(product);  
 			  }  
-			 
 			 return productList;
-			  
-			  
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("sql exception while fetchingbut action of a user==>"+e.getMessage());
 			return null;
 		}  catch(Exception e) {
 			System.out.println("exception in buy action");
 			return null;
 		}
-		
-		
-	}
-
-
-	
-	
-	
-	
-	
-	
-	
+	}	
 }

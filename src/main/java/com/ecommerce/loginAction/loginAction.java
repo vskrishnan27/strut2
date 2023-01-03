@@ -54,36 +54,27 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 			 session = ActionContext.getContext().getSession();
 				try {
 					dbConnection db = new dbConnection();
-					
-					
-//					String s = ServletActionContext.getRequest().
-					
 					System.out.println(username+"^^^^^"+password+"++++");
 					User user = db.checkLogin(username,password);
 					setUser(user);
-					if(user==null )
+					if(user==null ) {
 						System.out.println("no users found ==>username / pswrd may be wrong");
-
+						return "invalid user / check your credentials";
+					}
 					session.put("userInfo",user);
 					session.put("UUID", user.getUUID());
 					session.put("role", user.getRole());
-					
 					System.out.println("user returned");
 					return "user";
-	
-					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return "failed";	
 				}
-				
-				return "ok"; 
 		}catch(Exception e) {
 			System.out.println("loginaction");
-		}
-		
-
-		return "ok";
+			return "failed";
+		}	
 	}
 	
 	@Override
@@ -91,10 +82,6 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 		// TODO Auto-generated method stub
 		return this.user;
 	}
-
-
-
-
 
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
@@ -104,8 +91,16 @@ public class loginAction  implements ModelDriven<User>,ServletRequestAware{
 	}
 	
 	
-	
-	
+
+	public String logout() {
+		
+		Map<String, Object> sessionMap=ActionContext.getContext().getSession();
+		sessionMap.remove("UUID");
+		sessionMap.remove("role");
+		sessionMap.remove("userInfo");
+		System.out.println("Logged out successfully");
+		return "LOGOUT";
+	}
 	
 }
 

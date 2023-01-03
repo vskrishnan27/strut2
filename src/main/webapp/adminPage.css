@@ -1,3 +1,25 @@
+table{
+    border-collapse: collapse;
+
+}
+
+th,td{
+    outline: none;
+    padding: 1rem;
+    border: 1px solid black;
+    font-size: larger;
+    border-collapse: collapse;
+    align-items: center;
+}
+
+table button{
+    align-items: center;
+    color: rgb(0, 0, 0);
+    padding: 0.8rem;
+    border-radius: 10px;
+    margin: 0.1rem;
+}
+
 .navbar{
     background-color: black;
     /* border-radius: 30px; */
